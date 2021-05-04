@@ -32,7 +32,7 @@ class API {
           'Access-Key': this.token,
           'Content-Type': "x-url-form-encoded"
         }
-      }).then(res => {
+      }).then(async res => {
         return await JSON.parse(res.body)
       });
     }
@@ -40,6 +40,7 @@ class API {
 
   schedule = {
     get: async (div) => {
+      console.log
       if (!div) throw new Error("[js-kronos] Division field cannot be empty.")
       if (!["PBST", "PET", "PBM", "TMS"].indexOf(div)) throw new Error(`[js-kronos] Error: ${div} is not a valid division!`)
       
@@ -47,7 +48,7 @@ class API {
         headers: {
           'Access-Key': this.token
         }
-      }).then(res => {
+      }).then(async res => {
         return await JSON.parse(res.body)
       })
     }
