@@ -49,8 +49,6 @@ class API {
       }).then(res => {
         return await JSON.parse(res.body)
       })
-
-
     }
   }
 
