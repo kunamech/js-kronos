@@ -22,7 +22,7 @@ class API {
     get: async (id, div) => { //arrow functions B)
       if (!id) throw new Error("[js-kronos] ID field cannot be empty");
       if (!div) throw new Error("[js-kronos] Division field cannot be empty.");
-      if (div instanceof String) throw new Error("[js-kronos] division can only be a string!");
+      if (!div instanceof String) throw new Error("[js-kronos] division can only be a string!");
       if (id instanceof Number) id = toString(id);
       if (!["PBST", "TMS"].indexOf(div)) throw new Error(`[js-kronos] Error: ${div} is not a valid division!`);
 
