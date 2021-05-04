@@ -1,0 +1,22 @@
+{
+  "name": "js-kronos",
+  "version": "1.1.3",
+  "description": "An unofficial library to interact with kronos API ",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uurgothat/js-kronos"
+  },
+  "dependencies": {
+    "got": "^11.8.2"
+  },
+  "author": "uurgothat",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/uurgothat/js-kronos/issues"
+  },
+  "homepage": "https://github.com/uurgothat/js-kronos#readme"
+}
