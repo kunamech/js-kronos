@@ -7,7 +7,7 @@ var config = {
 
 class API {
   constructor(token) {
-    this.token = token
+    this.token = token;
   }
 
   version = require('../package').version; //Why this exists? what was the reason behind it? Jokes aside It gives the client version.
@@ -20,9 +20,9 @@ class API {
 
   blacklists = {
     get: async (id, div) => { //arrow functions B)
-      if (!id) throw new Error("[js-kronos] ID field cannot be empty");
+      if (!id) throw new Error("[js-kronos] ID field cannot be empty.");
       if (!div) throw new Error("[js-kronos] Division field cannot be empty.");
-      if (!div instanceof String) throw new Error("[js-kronos] division can only be a string!");
+      if (!div instanceof String) throw new Error("[js-kronos] Division can only be a string!");
       if (id instanceof Number) id = toString(id);
       if (!["PBST", "TMS"].indexOf(div)) throw new Error(`[js-kronos] Error: ${div} is not a valid division!`);
 
