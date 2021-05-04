@@ -4,7 +4,7 @@ An unofficial library to interact with Kronos API. Maintained by uurgothat.
 
 Example;
 ```javascript
-const kronos = require("kronos-js");
+const kronos = require("js-kronos");
 const client = new kronos("token");
 
     console.log(client.api.version) //V1
