@@ -3,7 +3,7 @@ const got = require("got"); //rip request
 var config = {
   hostname: 'pb-kronos.dev/api',
   version: `V1`
-}
+};
 
 class API {
   constructor(token) {
@@ -14,7 +14,7 @@ class API {
 
   api = {
     version: config.version //Gives the version of Kronos API
-  } 
+  }; 
 
   token = this.token; //Gives the client token
 
@@ -36,7 +36,7 @@ class API {
         return await JSON.parse(res.body)
       });
     }
-  }
+  };
 
   schedule = {
     get: async (div) => {
@@ -49,12 +49,11 @@ class API {
         }
       }).then(async res => {
         return await JSON.parse(res.body)
-      })
+      });
     }
-  }
-
-}
-
+  };
+};
 
 
-module.exports = API
+
+module.exports = API;
