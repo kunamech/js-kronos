@@ -42,6 +42,7 @@ class API {
     get: async (div) => {
       if (!div) throw new Error("[js-kronos] Division field cannot be empty.")
       if (!["PBST", "PET", "PBM", "TMS"].indexOf(div)) throw new Error(`[js-kronos] Error: ${div} is not a valid division!`)
+      
       got(`https://pb-kronos.dev/api/schedule/${div}`, {
         headers: {
           'Access-Key': this.token
