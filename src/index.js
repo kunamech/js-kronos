@@ -14,7 +14,7 @@ class API {
 
   api = {
     version: config.version //Gives the version of Kronos API
-  }
+  } 
 
   token = this.token; //Gives the client token
 
