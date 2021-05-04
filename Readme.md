@@ -13,6 +13,6 @@ const client = new kronos("token");
 
     client.blacklists.get("58507475", "PBM"); //false
 
-    client.schedule.get("PBM") //{...} (funfact: Nothing)
+    client.schedule.get("PBM") //{...} funfact: Nothing
 
 ```
