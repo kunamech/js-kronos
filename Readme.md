@@ -2,17 +2,18 @@
 
 An unofficial library to interact with Kronos API. Maintained by uurgothat.
 
-Example;
+Example usage:
 ```javascript
-const kronos = require("js-kronos");
-const client = new kronos("token");
+const Kronos = require("js-kronos");
+const client = new Kronos.Client("token");
 
     console.log(client.api.version) //V1
-    console.log(client.version) //1.0.0
+    console.log(Kronos.version) //2.0.0-beta
     console.log(client.token) //token
 
-    client.blacklists.get("58507475", "PBM"); //false
-
-    client.schedule.get("PBM") //{...} (funfact: Nothing)
+    client.blacklists.get('58507475', 'PBM'); //{'58507475': false}
+    client.blacklists.get(['1', '2', '3'], 'PET') //{'1': false, '2': false, '3': false}
+   
+    client.schedule.get('PET') //{...} (funfact: Nothing)
 
 ```
