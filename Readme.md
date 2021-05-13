@@ -3,6 +3,13 @@
 A promise-based (at least for now) Node.js API wrapper for Kronos API with It's single dependency and utility tools.
 Maintained by uurgothat aka cocoakacoco.
 
+
+How to install?
+====
+>Use this command to install.
+`npm i js-kronos`
+
+
 Example usage of the library with all functions avaible:
 ```javascript
 const Kronos = require('js-kronos');
@@ -32,7 +39,5 @@ Client.blacklists.find('cocoakacoco', 'PBM').then((response) => {
 Kronos.utils.getIdFromUsername('cocoakacoco').then((response) => {
     console.log(response) //58507475
 })
-
-
 
 ```
