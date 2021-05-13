@@ -1,19 +1,38 @@
-## Kronos-js
+## Js-kronos
 
-An unofficial library to interact with Kronos API. Maintained by uurgothat.
+A promise-based (at least for now) Node.js API wrapper for Kronos API with It's single dependency and utility tools.
+Maintained by uurgothat aka cocoakacoco.
 
-Example usage:
+Example usage of the library with all functions avaible:
 ```javascript
-const Kronos = require("js-kronos");
-const client = new Kronos.Client("token");
+const Kronos = require('js-kronos');
+const Client = new Kronos.createClient('token-string');
 
-    console.log(client.api.version) //V1
-    console.log(Kronos.version) //2.0.0-beta
-    console.log(client.token) //token
 
-    client.blacklists.get('58507475', 'PBM'); //{'58507475': false}
-    client.blacklists.get(['1', '2', '3'], 'PET') //{'1': false, '2': false, '3': false}
-   
-    client.schedule.get('PET') //{...} (funfact: Nothing)
+//Get schedule
+Client.schedule.get('TMS').then((response) => {
+console.log(response) //{...}
+});
+
+//Check if the user is blacklisted
+Client.blacklists.get('58507475', 'PET').then((response) => {
+    console.log(response) //{58507475: false}
+});
+
+//Use array to check multiple users
+client.blacklists.get(['58507475', '589547488'], 'PBST').then((response) => {
+    console.log(response) //{58507475: false, 589547488: false}
+});
+
+//Find users with their usernames
+Client.blacklists.find('cocoakacoco', 'PBM').then((response) => {
+  console.log(response) //{cococakacoco: false}
+})
+
+Kronos.utils.getIdFromUsername('cocoakacoco').then((response) => {
+    console.log(response) //58507475
+})
+
+
 
 ```

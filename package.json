@@ -1,7 +1,7 @@
 {
   "name": "js-kronos",
-  "version": "2.0.0-beta",
-  "description": "An unofficial library to interact with kronos API.",
+  "version": "2.0.0",
+  "description": "A Node.js API wrapper to interact with Kronos API.",
   "main": "src/index.js",
   "scripts": {
     "test": "node src/test"
@@ -11,10 +11,12 @@
     "url": "git+https://github.com/uurgothat/js-kronos"
   },
   "dependencies": {
+    "chalk": "^4.1.1",
+    "fs": "*",
     "got": "^11.8.2"
   },
   "author": "uurgothat",
-  "license": "ISC",
+  "license": "APACHE",
   "bugs": {
     "url": "https://github.com/uurgothat/js-kronos/issues"
   },

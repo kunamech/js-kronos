@@ -1,132 +1,234 @@
-const got = require("got");
+const got = require('got');
+const util = require('./util');
 
 const config = {
-  hostname: 'pb-kronos.dev/api/',
-  legacy: `v1`, //Useless
-  version: `v1` //Useless
+    hostname: 'pb-kronos.dev/api/',
+    version: `v2`
 };
 
-this.useLegacy = false;
-this.gateway = `https://${config.hostname}/`; //`https://${config.hostname}/${config.version}/`
+var gateway = `https://${config.hostname}${config.version}`; 
 
-/**@
- * Gives the version of the library
- *
- * @return {string} Version of the library.
- */
-var version = require('../package').version;
+var createKronosError = util.createKronosError;
+var createKronosWarning = util.createKronosWarning;
+var getIdFromUsername = util.getIdFromUsername;
+var correctDivision = util.correctDivision;
 
 class API {
-  constructor(token) {
-    this.token = token;
-  };
+    constructor(KeyEntry) {
+        this.token = KeyEntry;
+         this.headers = {'Access-key': this.token, 'Content-Type': 'application/json'}
+    }
 
-  api = {
-    version: config.version,
-    legacy: {
-      version: config.legacy
-    },
-    useLegacy:(async() => {
-      while (true) {
-        this.useLegacy = true
-      };
-    })
-  };
-
-
-  /**
-   * Give the token of the client
-   * 
-   * @override
-   * @since 1.1.0 */
-  token = this.token;
-
-  blacklists = {
+api = {
     /**
-     * Returns 
-     *
-     * @param {string} id The Roblox ID to check if the person is blacklisted.
-     * @param {Array} id The Roblox IDs to check if the persons are blacklisted.
-     * @param {string} div The division to check
-     * @return {boolean} x raised to the n-th power.
+     * Gives the wrapper configurations
+     * 
+     * 
      */
-    get: async (id, div) => { //arrow functions B)
-      if (!id) throw new Error("[js-kronos] ID field cannot be empty.");
-      if (!div) throw new Error("[js-kronos] Division field cannot be empty.");
-      if (!div instanceof String) throw new Error("[js-kronos] Division can only be a string!");
-      if (id instanceof Number) id = toString(id);
-      if (!["PBST", "TMS"].indexOf(div)) throw new Error(`[js-kronos] Error: ${div} is not a valid division!`);
+    config: {
+        config,
+        gateway
+    },
+    /**
+     * Gives the API version
+     *
+     * @returns {String} 
+     */
+    version: config.version,
+    /**
+     * Gives the header configurations in use
+     * 
+     */
+    headers: this.headers
+}
 
-      if (id instanceof Array) id = Array.join(",")
+blacklists = {
+    /**
+     * Check if the user is blacklisted.
+     * 
+     * 
+     * @param {(Array|String)} userId Id(s) to check
+     * @param {String} division Division to check
+     * 
+     * @returns {Promise}
+     */
+    get: (async(userId, division) => {
+        let set;
+        let postArray = []
+      if(correctDivision(division) === true) {
+        if(!userID instanceof (String||Array||Number)) return createKronosError(`userId can only be a string or array!`)
+        //Array handling
+        if(userID instanceof Array) {
+            userID.forEach(x => {
+                if(!x instanceof (String||Number) && x.includes("?" || "/" || ".")) return createKronosError(`userId Array contains illegal object or strings! (blacklists#get)`);
+                if(x instanceof Number) toString(x)
+                postArray.push(x);
+                set = postArray.join(",")
+            });
+        }
 
-      if (this.useLegacy == false, this.useLegacy !== true) {
-        got(`${this.gateway}${div}/blacklist/checkusers?userids=${id}`, { //change at V2
-          headers: {
-            'Access-Key': this.token,
-            'Content-Type': 'application/json'
-          }
-        }).then(async res => {
-          return await JSON.parse(res.body)
-        });
-
-      } else if (this.useLegacy == true) { //put the previous at V2
-        got(`https://pb-kronos.dev/${div}/blacklist/checkusers?userids=${id}`, {
-          headers: {
-            'Access-Key': this.token,
-            'Content-Type': "application/json"
-          }
-        }).then(async res => {
-          return await JSON.parse(res.body)
-        });
+        let promise = new Promise((resolve, reject) =>{
+        got(`${gateway}/blacklist/${division}/blacklist?checkusers=${set}`, {headers: this.headers}).then((res) => {
+       resolve(JSON.parse(res.body))
+        }).catch((err) => {
+            reject(createKronosError(`${err.response.statusCode}: ${err.response.body} (blacklists#get)`));
+        })
+        return await promise.then(data => { return data })
+    })
+      }else{
+          return createKronosError(``)
       }
+      
+     
+
+    }),
+
+    /**
+     * Check the user if blacklisted.
+     * 
+     * @param {String} username Tthe Username.
+     * @param {String} division The division.
+     * 
+     * @returns {Promise}
+     */
+    find: (async (username, division) => {
+        let user;
+     var user = getIdFromUsername(username).then((username) => {
+         user = username;
+     });
+
+     let promise = new Promise((resolve, reject) =>{
+     got(`${gateway}${division}/blacklist/checkusers?userids=${user}`, {headers: this.headers}).then((res) => {
+        resolve(JSON.parse(res.body))
+    }).catch((err) => {
+        reject(createKronosError(`${err.response.statusCode}: ${err.response.body} (blacklists#find)`));
+      })
+    })
+
+    return await promise.then(data => { return data })
+    })
+}
+
+schedule = {
+    /**
+     * Get the schedule of a division
+     * 
+     * @param {String} div The division [PBST, TMS, PBM are avaible] or ALL for schedule of all avaible divisions 
+     * @returns  {Promise}
+     */
+get: async (div) => {
+
+    if(!div) return createKronosError(`Division cannot be empty! (schedule#get)`)
+    
+
+    if(div === "ALL"){
+        let promise = new Promise((resolve, reject) =>{
+            got(`${gateway}/schedule/all`, {headers: this.headers}).then(function(data) {
+                resolve(JSON.parse(data.body))
+             }).catch((err) => {
+                 reject(createKronosError(`${err.response.statusCode}: ${err.response.body} (schedule#get)`, false));
+             })
+        })
+
+        return await promise.then(data => { return data })
     }
-  };
+    
 
-  /**
-   * Returns with division schedule.
-   *
-   * @param {string} div The division to check the schedule
-   * @return {Array} Division schedule.
-   */
-  schedule = {
-    get: async (div) => {
-      if (!div) throw new Error("[js-kronos] Division field cannot be empty.")
-      if (!["PBST", "PET", "PBM", "TMS"].indexOf(div)) throw new Error(`[js-kronos] Error: ${div} is not a valid division!`)
+    var result = correctDivision(div, 1)
+    
+    if(result === true){
+        let promise = new Promise((resolve, reject) => {
+        got(`${gateway}/schedule/${div}`, {headers: this.headers}).then(function(data) {
+           resolve(JSON.parse(data.body))
+        }).catch((err) => {
+           return reject(createKronosError(`${err.response.statusCode}: ${err.response.body} (schedule#get)`));
+        })
+    })
 
-      if (this.useLegacy == false, this.useLegacy !== true) {
-        got(`${this.gateway}/schedule/${div}`, {
+     return await promise.then(data => { return data })
 
-        }).then(async res => {
-          return await JSON.parse(res.body)
-        });
-      } else if (this.useLegacy == true) {
-        got(`https://pb-kronos.dev/api/schedule/${div}`, {
-          headers: {
-            'Access-Key': this.token
-          }
-        }).then(async res => {
-          return await JSON.parse(res.body)
-        });
-      }
-
+    }else{
+      return  createKronosError(`Division is not valid or not a string! Valid ones are: PBST,TMS,PET,PBM (schedule#get)`, true)
     }
-  };
+},
+
+/**
+ * Get event colors of a division.
+ * 
+ * @param {String} division The division.
+ * 
+ */
+colors: ((division) =>{
+    return createKronosWarning(`schedule#colors is not an active feature.`)
+   
+   /* var result = correctDivision(div)
+    if(result === true){
+        let promise = new Promise((resolve, reject) => {
+    got(`${gateway}/schedule/${division}/colors`, {headers: this.headers}).then((res) => {
+        resolve(res.body)
+    }).catch((err) => {
+        return reject(createKronosError(`${err.response.statusCode}: ${err.response.body} (schedule#colors)`));
+     })
+    })
+    return await promise
+
+    }else{
+       return createKronosError(`Division is not valid or not a string! Valid ones are: PBST,TMS,PET,PBM (schedule#colors)`, true)
+    }*/
+})
+}
+
+}
+
+var utils = {
+    /**
+     * Get ID of a user with username
+     * 
+     * @param {String} id Username
+     * 
+     * @returns {Promise} 
+     */
+    getIdFromUsername: getIdFromUsername,
+/**
+     * Check if the division name is correct.
+     * 
+     * @param {String} div Division.
+     * 
+     * @returns {Boolean} 
+     */
+    correctDivision: correctDivision
 };
 
-
+function checkBaseFile() {
+var base = require('./base');
+if(!base){
+ return createKronosError('OH NOOOO RED IS NOT HERE... PLS REINSTALL OR I WILL RESIST TO WORKING!', true)
+}else{
+    return
+}
+};
 
 module.exports = {
-  /**
-   * Declare the client.
-   * 
-   * @class
-   * @since 1.0.0
-   */
-  Client: API,
     /**
-   * Give the token of the client.
-   * 
-   * @override
-   * @since 1.1.0 */
-  version: version
+     * Create the client 
+     * 
+     * 
+     * @param {String} KeyEntry The token.
+     * 
+     * @class
+     */
+    createClient: API,
+
+    /**
+     * 
+     * Gives the version of the js-kronos library.
+     * 
+     * @returns {String} Library version
+     */
+    version: require('../package').version,
+    util: utils
+}
+
+module.loaded = {
+checkBaseFile
 }
