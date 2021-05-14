@@ -105,7 +105,7 @@ class API {
          */
         find: (async (username, division) => {
             let user;
-            var user = getIdFromUsername(username).then((username) => {
+            getIdFromUsername(username).then((username) => {
                 user = username;
             });
 
