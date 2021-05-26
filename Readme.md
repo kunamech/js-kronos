@@ -6,11 +6,15 @@ Maintained by uurgothat aka cocoakacoco.
 
 How to install?
 ====
->Use this command to install.
-`npm i js-kronos`
+Use this command to install
+
+> npm i js-kronos --save
 
 
-Example usage of the library with all functions avaible:
+How to use it?
+== 
+
+Here is an example usage of the library with all functions avaible:
 ```javascript
 const Kronos = require('js-kronos');
 const Client = new Kronos.createClient('token-string');

@@ -58,6 +58,8 @@ class API {
         get: (async (userId, division) => {
             let set;
             let postArray = []
+            let division = division.toUpperCase()
+
             if (correctDivision(division) === true) {
                 if (!userID instanceof(String || Array || Number)) return createKronosError(`userId can only be a string or array!`)
                 //Array handling
@@ -133,11 +135,10 @@ class API {
          * @returns  {Promise}
          */
         get: async (div) => {
-
             if (!div) return createKronosError(`Division cannot be empty! (schedule#get)`)
-
-
-            if (div === "ALL") {
+            let division = div.toUpperCase()
+            
+            if (division === "ALL") {
                 let promise = new Promise((resolve, reject) => {
                     got(`${gateway}/schedule/all`, {
                         headers: this.headers
@@ -153,12 +154,11 @@ class API {
                 })
             }
 
+        
 
-            var result = correctDivision(div, 1)
-
-            if (result === true) {
+            if (correctDivision(division, 1) === true) {
                 let promise = new Promise((resolve, reject) => {
-                    got(`${gateway}/schedule/${div}`, {
+                    got(`${gateway}/schedule/${division}`, {
                         headers: this.headers
                     }).then(function (data) {
                         resolve(JSON.parse(data.body))
@@ -223,15 +223,6 @@ var utils = {
     correctDivision: correctDivision
 };
 
-function checkBaseFile() {
-    var base = require('./base');
-    if (!base) {
-        return createKronosError('OH NOOOO RED IS NOT HERE... PLS REINSTALL OR I WILL RESIST TO WORKING!', true)
-    } else {
-        return
-    }
-};
-
 module.exports = {
     /**
      * Create the client 
@@ -251,8 +242,4 @@ module.exports = {
      */
     version: require('../package').version,
     util: utils
-}
-
-module.loaded = {
-    checkBaseFile
 }

@@ -1,5 +1,4 @@
 const got = require("got");
-const chalk = require("chalk");
 
 /**
  * 
@@ -32,6 +31,7 @@ function createKronosWarning(text) {
 
 
 function createKronosError(text, ifThrow) {
+  if(!ifThrow) ifThrow = false
   if (ifThrow == true) {
     throw new Error(`[js-kronos] ERROR: ${text}`)
   } else if (ifThrow == false) {
