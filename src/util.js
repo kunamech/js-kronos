@@ -40,8 +40,8 @@ function createKronosError(text, ifThrow) {
 };
 
 function correctDivision(div, usage) { //usage 1 is schedule
-  var bDivisions = ['PBST', 'TMS']
-  var sDivisions = ['PBST', 'TMS', 'PET', 'PBM']
+  let bDivisions = ['PBST', 'TMS']
+  let sDivisions = ['PBST', 'TMS', 'PET', 'PBM']
   if (div instanceof String !== false) return false
 
   if (!usage) {

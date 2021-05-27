@@ -6,12 +6,12 @@ const config = {
     version: `v2`
 };
 
-var gateway = `https://${config.hostname}${config.version}`;
+const gateway = `https://${config.hostname}${config.version}`;
 
-var createKronosError = util.createKronosError;
-var createKronosWarning = util.createKronosWarning;
-var getIdFromUsername = util.getIdFromUsername;
-var correctDivision = util.correctDivision;
+const createKronosError = util.createKronosError;
+const createKronosWarning = util.createKronosWarning;
+const getIdFromUsername = util.getIdFromUsername;
+const correctDivision = util.correctDivision;
 
 class API {
     constructor(KeyEntry) {
