@@ -58,7 +58,7 @@ class API {
         get: (async (userId, division) => {
             let set;
             let postArray = []
-            let division = division.toUpperCase()
+            division = division.toUpperCase()
 
             if (correctDivision(division) === true) {
                 if (!userID instanceof(String || Array || Number)) return createKronosError(`userId can only be a string or array!`)
