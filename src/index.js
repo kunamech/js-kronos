@@ -108,9 +108,6 @@ class API {
         find: (async (username, division) => {
             let user;
 
-            function callback(res) {
-                return res
-            }
             getIdFromUsername(username).then((username) => {
                 user = username;
 
@@ -123,11 +120,9 @@ class API {
                         reject(createKronosError(`${err.response.statusCode}: ${err.response.body} (blacklists#find)`));
                     })
                 })
-    
-                return await callback(promise)
             });
 
-
+            return await promise
         })
     }
 
@@ -171,9 +166,7 @@ class API {
                     })
                 })
 
-                return await promise.then(data => {
-                    return data
-                })
+                return await promise
 
             } else {
                 return createKronosError(`Division is not valid or not a string! Valid ones are: PBST,TMS,PET,PBM (schedule#get)`, true)
@@ -208,7 +201,7 @@ class API {
 
 }
 
-var utils = {
+const utils = {
     /**
      * Get ID of a user with username
      * 
