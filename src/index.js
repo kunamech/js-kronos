@@ -107,23 +107,27 @@ class API {
          */
         find: (async (username, division) => {
             let user;
+
+            function callback(res) {
+                return res
+            }
             getIdFromUsername(username).then((username) => {
                 user = username;
+
+                let promise = new Promise((resolve, reject) => {
+                    got(`${gateway}${division}/blacklist/checkusers?userids=${user}`, {
+                        headers: this.headers
+                    }).then((res) => {
+                        resolve(JSON.parse(res.body))
+                    }).catch((err) => {
+                        reject(createKronosError(`${err.response.statusCode}: ${err.response.body} (blacklists#find)`));
+                    })
+                })
+    
+                return await callback(promise)
             });
 
-            let promise = new Promise((resolve, reject) => {
-                got(`${gateway}${division}/blacklist/checkusers?userids=${user}`, {
-                    headers: this.headers
-                }).then((res) => {
-                    resolve(JSON.parse(res.body))
-                }).catch((err) => {
-                    reject(createKronosError(`${err.response.statusCode}: ${err.response.body} (blacklists#find)`));
-                })
-            })
 
-            return await promise.then(data => {
-                return data
-            })
         })
     }
 
@@ -136,7 +140,7 @@ class API {
          */
         get: async (div) => {
             if (!div) return createKronosError(`Division cannot be empty! (schedule#get)`)
-            let division = div.toUpperCase()
+            division = div.toUpperCase()
             
             if (division === "ALL") {
                 let promise = new Promise((resolve, reject) => {
