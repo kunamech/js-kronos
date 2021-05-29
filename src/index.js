@@ -55,10 +55,10 @@ class API {
          * 
          * @returns {Promise}
          */
-        get: (async (userId, division) => {
+        get: (async (userId, div) => {
             let set;
             let postArray = []
-            division = division.toUpperCase()
+            let division = div.toUpperCase()
 
             if (correctDivision(division) === true) {
                 if (!userID instanceof(String || Array || Number)) return createKronosError(`userId can only be a string or array!`)
@@ -105,8 +105,9 @@ class API {
          * 
          * @returns {Promise}
          */
-        find: (async (username, division) => {
+        find: (async (username, div) => {
             let user;
+            let division = div.toUpperCase()
 
             getIdFromUsername(username).then((username) => {
                 user = username;
@@ -135,7 +136,7 @@ class API {
          */
         get: async (div) => {
             if (!div) return createKronosError(`Division cannot be empty! (schedule#get)`)
-            division = div.toUpperCase()
+            let division = div.toUpperCase()
             
             if (division === "ALL") {
                 let promise = new Promise((resolve, reject) => {
