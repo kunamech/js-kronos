@@ -3,7 +3,6 @@
   "version": "2.0.6",
   "description": "A Node.js API wrapper for Kronos API.",
   "main": "src/index.js",
-  "private": false,
   "scripts": {
     "test": "node src/test"
   },
@@ -12,8 +11,7 @@
     "url": "git+https://github.com/uurgothat/js-kronos"
   },
   "dependencies": {
-    "got": "^11.8.2",
-    "js-kronos": "^1.0.0"
+    "got": "^11.8.2"
   },
   "author": "uurgothat",
   "license": "APACHE",
