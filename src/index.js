@@ -8,10 +8,7 @@ const config = {
 
 const gateway = `https://${config.hostname}${config.version}`;
 
-const createKronosError = util.createKronosError;
-const createKronosWarning = util.createKronosWarning;
-const getIdFromUsername = util.getIdFromUsername;
-const correctDivision = util.correctDivision;
+const {createKronosError, createKronosWarning, getIdFromUsername, correctDivision} = util
 
 class API {
     constructor(KeyEntry) {
