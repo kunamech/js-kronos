@@ -49,6 +49,6 @@ Kronos.plugin.extend('plugin', 'https://api.thecatapi.com/v1/images/search', {he
 
 //Run the extended plugin.
 Kronos.plugin.run('plugin').then((response) => {
-    console.log(response.body.url)
+    console.log(response.url)
 })
 ```
