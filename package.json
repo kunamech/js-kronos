@@ -1,6 +1,6 @@
 {
   "name": "js-kronos",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "description": "A Node.js API wrapper for Kronos API.",
   "main": "src/index.js",
   "scripts": {
@@ -8,12 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/uurgothat/js-kronos"
+    "url": "git+https://github.com/Thesourtimes/js-kronos"
   },
   "dependencies": {
     "got": "^11.8.2"
   },
-  "author": "uurgothat",
+  "author": "Thesourtimes",
   "license": "APACHE",
   "bugs": {
     "url": "https://gitlab.com/pinewood-builders/handbooks/pinewood/kronos-api/javascript/js-kronos/-/issues"

@@ -10,6 +10,7 @@ const gateway = `https://${config.hostname}${config.version}`;
 
 const {createKronosError, createKronosWarning, getIdFromUsername, correctDivision} = util
 
+let plugins = {};
 class API {
     constructor(KeyEntry) {
         this.token = KeyEntry;
@@ -151,8 +152,6 @@ class API {
                 })
             }
 
-        
-
             if (correctDivision(division, 1) === true) {
                 let promise = new Promise((resolve, reject) => {
                     got(`${gateway}/schedule/${division}`, {
@@ -196,6 +195,51 @@ class API {
              }*/
         })
     }
+
+        plugin = {
+
+            /**
+             * Extend a custom gateway.
+             * @param {String} name Name of the plugin
+             * @param {String} url Gateway
+             * @param {Object} header Custom headers (Access-Key and Content-Type already included)
+             * @returns Response body
+             */
+            extend: async(name, url, header) => {
+                if(!header) header = {}
+                if(!name || !url) return createKronosError(`name and url are mandatory for plugins. (plugin#extend)`, true)
+                const form = {
+                    gate: url,
+                    header: header + this.headers,
+                
+                }
+                return plugins[name] = form
+        },
+        /**
+         * Run a plugin.
+         * @param {String} mod  Plugin name
+         * @returns Response body
+         */
+        run: async(mod) => {
+            const addon = plugins[mod]
+            if(!addon) return createKronosError(`ERROR: ${mod} is not extended (run#${mod})`, true)
+            let promise = new Promise((resolve, reject) => {
+                got(addon.gate, {
+                    headers: Object.assign(addon.header, this.headers)
+                }).then(function (data) {
+                    resolve(JSON.parse(data.body))
+                }).catch((err) => {
+                  return reject(createKronosError(`${err} (run#${mod})`));
+                })    
+            })
+            return await promise.then(data => {
+                return data
+            })
+
+        }
+    }
+
+    
 
 }
 

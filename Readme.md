@@ -1,7 +1,7 @@
 ## Js-kronos
 
-A promise-based (at least for now) Node.js API wrapper for Kronos API with It's single dependency and utility tools.
-Maintained by uurgothat aka cocoakacoco.
+A promise-based Node.js API wrapper for Kronos API with It's single dependency and utility tools.
+Maintained by Thesourtimes.
 
 
 How to install?
@@ -14,7 +14,7 @@ Use this command to install
 How to use it?
 == 
 
-Here is an example usage of the library with all functions avaible:
+Here is an example code with all the functions avaible:
 ```javascript
 const Kronos = require('js-kronos');
 const Client = new Kronos.createClient('token-string');
@@ -38,10 +38,17 @@ client.blacklists.get(['58507475', '589547488'], 'PBST').then((response) => {
 //Find users with their usernames
 Client.blacklists.find('cocoakacoco', 'PBM').then((response) => {
   console.log(response) //{cococakacoco: false}
-})
+});
 
 Kronos.utils.getIdFromUsername('cocoakacoco').then((response) => {
     console.log(response) //58507475
-})
+});
 
+//Extend a plugin
+Kronos.plugin.extend('plugin', 'https://api.thecatapi.com/v1/images/search', {here: 'is the optional headers'})
+
+//Run the extended plugin.
+Kronos.plugin.run('plugin').then((response) => {
+    console.log(response.body.url)
+})
 ```

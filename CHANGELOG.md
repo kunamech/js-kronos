@@ -1,3 +1,11 @@
+
+2.0.4
+===
+> Plugin API. WIP.
+
+> Updated the connections in package.json. I also changed my username.
+
+
 2.0.3
 ====
 

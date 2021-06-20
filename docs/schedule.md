@@ -26,4 +26,4 @@ client.schedule.get('PbSt').then(async(promise) => {
 ```
 
 
-TBD. I'm lazy.
+WIP. I'm lazy.
