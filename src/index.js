@@ -215,7 +215,6 @@ class API {
             const addon = plugins[mod];
             if(!obj) obj = {}
             const url = !addon.query && !obj.param ? addon.query ? addon.gate+`?${addon.query}=${obj.query ? obj.query : ''}` : obj.param ? addon.gate+`/${obj.param}` : addon.gate : addon.gate+`/${obj.param}?${addon.query}=${obj.query}`;
-            console.log(url)
             if(!addon) return createKronosError(`ERROR: ${mod} is not extended (run#${mod})`, true);
 
             let promise = new Promise((resolve, reject) => {
