@@ -1,4 +1,4 @@
-2.0.9
+2.1.0
 ===
 > Plugin API progress with query, param , object entry.
 
