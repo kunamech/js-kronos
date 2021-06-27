@@ -116,8 +116,8 @@ class API {
                     got(`${gateway}${division}/blacklist/checkusers?userids=${user}`, {
                         headers: this.headers
                     }).then((res) => {
-                        let res = JSON.parse(res.body);
-                        obj[username] = res[user];
+                        let respon = JSON.parse(res.body);
+                        obj[username] = respon[user];
                         resolve(JSON.parse(JSON.stringify(obj)))
                     }).catch((err) => {
                         reject(createKronosError(`${err.response.statusCode}: ${err.response.body} (blacklists#find)`));
