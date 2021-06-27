@@ -162,7 +162,7 @@ class API {
          * @param {String} division The division.
          * @description Check https://github.com/Thesourtimes/js-kronos/blob/main/docs/schedule.md
          */
-        colors: ((division) => {
+        colors: async (division) => {
             return createKronosWarning(`schedule#colors is not an active method. (schedule#colors)`)
             let div = division.toUpperCase();
             if(!correctDivision(div)) return createKronosError(`ERROR: ${div} is not a valid division (schedule#colors)`);
@@ -176,7 +176,9 @@ class API {
                 })
             })
             return await promise
-        })
+            
+        }
+        
     }
 
         plugin = {
