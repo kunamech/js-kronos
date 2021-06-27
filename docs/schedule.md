@@ -1,7 +1,7 @@
 createClient#Schedule
 ===
 
-This is prob. the most critic part of the library. 
+This method is prob. the fundamental of the library
 
 
 
@@ -26,4 +26,14 @@ client.schedule.get('PbSt').then(async(promise) => {
 ```
 
 
-WIP. I'm lazy.
+Schedule#colors
+==
+
+Reserved for future. Coasterteam hasn't relased it yet.
+
+```js
+client.schedule.colors('PbSt').then(async(promise) => {
+    //Stuff to do with promise.
+});
+
+```

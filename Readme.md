@@ -44,11 +44,9 @@ Kronos.utils.getIdFromUsername('cocoakacoco').then((response) => {
     console.log(response) //58507475
 });
 
-//Extend a plugin
-Kronos.plugin.extend('plugin', 'https://api.thecatapi.com/v1/images/search', {here: 'is the optional headers'})
+client.plugin.extend('gato', {url: 'https://api.thecatapi.com/v1/images', query: 'id', headers: {poo: 'hi'}})
 
-//Run the extended plugin.
-Kronos.plugin.run('plugin').then((response) => {
-    console.log(response.url)
-})
+client.plugin.run('gato', {param: 'search', query: '1'}).then(function(response) {
+    //...
+}) //Goes to https://api.thecatapi.com/v1/images/search?id=1 with specified header poo.
 ```

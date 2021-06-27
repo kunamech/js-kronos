@@ -1,5 +1,16 @@
+2.0.9
+===
+> Plugin API progress with query, param , object entry.
 
-2.0.4
+> Some fixes and improvements on code.
+
+> JSDOC improvements.
+
+> Docs are finished.
+
+> Beginning of a break. 
+
+2.0.8
 ===
 > Plugin API. WIP.
 

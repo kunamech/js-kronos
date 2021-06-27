@@ -16,9 +16,7 @@ async function getIdFromUsername(id) {
       reject(createKronosError(`${err} (getIdFromUsername)`));
     })
   })
-  await promise.then(data => {
-    return data
-  })
+  return await promise
   //}else{
   //console.error(`[js-kronos]  ${chalk.red('ERROR: username can only be a string')}.`)
   //}
@@ -39,34 +37,17 @@ function createKronosError(text, ifThrow) {
   };
 };
 
-function correctDivision(div, usage) { //usage 1 is schedule
+function correctDivision(division, usage) { //false is schedule
+  let mode = usage || false;
+  let div = division.toUpperCase()
+
   let bDivisions = ['PBST', 'TMS']
-  let sDivisions = ['PBST', 'TMS', 'PET', 'PBM']
+  let sDivisions = ['PBST', 'TMS', 'PET', 'PBM', 'ALL']
   if (div instanceof String !== false) return false
 
-  if (!usage) {
-
-    if (sDivisions.includes(div)) {
-      return true
-    } else {
-      return false
-    }
-  } else {
-    if (usage <= 0) {
-      if (bDivisions.includes(div)) {
-        return true
-      } else {
-        return false
-      }
-    }
-    if (usage >= 1) {
-      if (sDivisions.includes(div)) {
-        return true
-      } else {
-        return false
-      }
-    }
-  }
+  if(!mode && sDivisions.includes(div)) return true
+  if(mode && bDivisions.includes(div)) return true
+  return false
 }
 
 module.exports = {

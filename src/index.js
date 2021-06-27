@@ -24,7 +24,8 @@ class API {
         /**
          * Gives the wrapper configurations
          * 
-         * 
+         * @description Check https://github.com/Thesourtimes/js-kronos/blob/main/docs/misc.md
+         * @returns {Object} return config and gateway
          */
         config: {
             config,
@@ -33,12 +34,15 @@ class API {
         /**
          * Gives the API version
          *
-         * @returns {String} 
+         * @description Check https://github.com/Thesourtimes/js-kronos/blob/main/docs/misc.md
+         * @returns {String} return version.
          */
         version: config.version,
         /**
          * Gives the header configurations in use
          * 
+         * @description Check https://github.com/Thesourtimes/js-kronos/blob/main/docs/misc.md
+         * @returns {Object} return headers object
          */
         headers: this.headers
     }
@@ -50,7 +54,7 @@ class API {
          * 
          * @param {(Array|String)} userId Id(s) to check
          * @param {String} division Division to check
-         * 
+         * @description Check https://github.com/Thesourtimes/js-kronos/blob/main/docs/blacklist.md
          * @returns {Promise}
          */
         get: (async (userId, div) => {
@@ -58,7 +62,7 @@ class API {
             let postArray = []
             let division = div.toUpperCase()
 
-            if (correctDivision(division) === true) {
+            if (correctDivision(division, true)) {
                 if (!userID instanceof(String || Array || Number)) return createKronosError(`userId can only be a string or array!`)
                 //Array handling
                 if (userID instanceof Array) {
@@ -82,10 +86,8 @@ class API {
                     })
                     
                 })
- //for commit
-                return await promise.then(data => {
-                    return data
-                })
+                return await promise
+
 
             } else {
                 return createKronosError(`This is not a valid division! (blacklists#get)`)
@@ -100,21 +102,23 @@ class API {
          * 
          * @param {String} username Tthe Username.
          * @param {String} division The division.
-         * 
+         * @description Check https://github.com/Thesourtimes/js-kronos/blob/main/docs/blacklist.md
          * @returns {Promise}
          */
         find: (async (username, div) => {
             let user;
-            let division = div.toUpperCase()
+            let division = div.toUpperCase();
 
-            getIdFromUsername(username).then((username) => {
-                user = username;
+            getIdFromUsername(username).then((user) => {
+                let obj = {};
 
                 let promise = new Promise((resolve, reject) => {
                     got(`${gateway}${division}/blacklist/checkusers?userids=${user}`, {
                         headers: this.headers
                     }).then((res) => {
-                        resolve(JSON.parse(res.body))
+                        let res = JSON.parse(res.body);
+                        obj[username] = res[user];
+                        resolve(JSON.parse(JSON.stringify(obj)))
                     }).catch((err) => {
                         reject(createKronosError(`${err.response.statusCode}: ${err.response.body} (blacklists#find)`));
                     })
@@ -131,28 +135,13 @@ class API {
          * 
          * @param {String} div The division [PBST, TMS, PBM are avaible] or ALL for schedule of all avaible divisions 
          * @returns  {Promise}
+         * @description Check https://github.com/Thesourtimes/js-kronos/blob/main/docs/schedule.md
          */
         get: async (div) => {
             if (!div) return createKronosError(`Division cannot be empty! (schedule#get)`)
             let division = div.toUpperCase()
-            
-            if (division === "ALL") {
-                let promise = new Promise((resolve, reject) => {
-                    got(`${gateway}/schedule/all`, {
-                        headers: this.headers
-                    }).then(function (data) {
-                        resolve(JSON.parse(data.body))
-                    }).catch((err) => {
-                        reject(createKronosError(`${err.response.statusCode}: ${err.response.body} (schedule#get)`, false));
-                    })
-                })
 
-                return await promise.then(data => {
-                    return data
-                })
-            }
-
-            if (correctDivision(division, 1) === true) {
+            if (correctDivision(division, false)) {
                 let promise = new Promise((resolve, reject) => {
                     got(`${gateway}/schedule/${division}`, {
                         headers: this.headers
@@ -162,37 +151,31 @@ class API {
                         return reject(createKronosError(`${err.response.statusCode}: ${err.response.body} (schedule#get)`));
                     })
                 })
-
                 return await promise
-
-            } else {
-                return createKronosError(`Division is not valid or not a string! Valid ones are: PBST,TMS,PET,PBM (schedule#get)`, true)
             }
+         return createKronosError(`Division is not valid or not a string! Valid ones are: PBST,TMS,PET,PBM (schedule#get)`, true)
         },
 
         /**
          * Get event colors of a division.
          * 
          * @param {String} division The division.
-         * 
+         * @description Check https://github.com/Thesourtimes/js-kronos/blob/main/docs/schedule.md
          */
         colors: ((division) => {
-            return createKronosWarning(`schedule#colors is not an active feature.`)
-
-            /* var result = correctDivision(div)
-             if(result === true){
-                 let promise = new Promise((resolve, reject) => {
-             got(`${gateway}/schedule/${division}/colors`, {headers: this.headers}).then((res) => {
-                 resolve(res.body)
-             }).catch((err) => {
-                 return reject(createKronosError(`${err.response.statusCode}: ${err.response.body} (schedule#colors)`));
-              })
-             })
-             return await promise
-
-             }else{
-                return createKronosError(`Division is not valid or not a string! Valid ones are: PBST,TMS,PET,PBM (schedule#colors)`, true)
-             }*/
+            return createKronosWarning(`schedule#colors is not an active method. (schedule#colors)`)
+            let div = division.toUpperCase();
+            if(!correctDivision(div)) return createKronosError(`ERROR: ${div} is not a valid division (schedule#colors)`);
+            let promise = new Promise((resolve, reject) => {
+                got(`${gateway}/schedule/${division}/colors`, {
+                    headers: this.headers
+                }).then(function (data) {
+                    resolve(JSON.parse(data.body))
+                }).catch((err) => {
+                    return reject(createKronosError(`${err.response.statusCode}: ${err.response.body} (schedule#colors)`));
+                })
+            })
+            return await promise
         })
     }
 
@@ -201,44 +184,49 @@ class API {
             /**
              * Extend a custom gateway.
              * @param {String} name Name of the plugin
-             * @param {String} url Gateway
-             * @param {Object} header Custom headers (Access-Key and Content-Type already included)
+             * @param {Object} obj Object of plugin.
              * @returns Response body
+             * @description Check https://github.com/Thesourtimes/js-kronos/blob/main/docs/plugin.md
              */
-            extend: async(name, url, header) => {
-                if(!header) header = {}
-                if(!name || !url) return createKronosError(`name and url are mandatory for plugins. (plugin#extend)`, true)
+            extend: async(name, obj) => {
+                let header = obj.headers || {};
+                let query = obj.query || null;
+
+                if(!name || !obj.url) return createKronosError(`name and url are mandatory for plugins. (plugin#extend)`, true)
                 const form = {
-                    gate: url,
-                    header: header + this.headers,
-                
+                    gate: obj.url,
+                    header: header,
+                    query: query,
                 }
+
                 return plugins[name] = form
         },
         /**
-         * Run a plugin.
+         * Run an extended plugin.
          * @param {String} mod  Plugin name
-         * @returns Response body
+         * @param {String} query Additional parameter for queries
+         * @param {String} param Additional parameter for params
+         * @returns Response
+         * @description Check https://github.com/Thesourtimes/js-kronos/blob/main/docs/plugin.md
          */
-        run: async(mod) => {
-            const addon = plugins[mod]
-            if(!addon) return createKronosError(`ERROR: ${mod} is not extended (run#${mod})`, true)
+        run: async(mod, obj) => {
+            const addon = plugins[mod];
+            if(!obj) obj = {}
+            const url = !addon.query && !obj.param ? addon.query ? addon.gate+`?${addon.query}=${obj.query ? obj.query : ''}` : obj.param ? addon.gate+`/${obj.param}` : addon.gate : addon.gate+`/${obj.param}?${addon.query}=${obj.query}`;
+            console.log(url)
+            if(!addon) return createKronosError(`ERROR: ${mod} is not extended (run#${mod})`, true);
+
             let promise = new Promise((resolve, reject) => {
-                got(addon.gate, {
-                    headers: Object.assign(addon.header, this.headers)
-                }).then(function (data) {
+                got(url, {headers: Object.assign(addon.header, this.headers)}).then(function (data) {
                     resolve(JSON.parse(data.body))
                 }).catch((err) => {
-                  return reject(createKronosError(`${err} (run#${mod})`));
-                })    
+                    reject(createKronosError(`ERROR: ${err} (plugin#run)`, true));
+                })
             })
-            return await promise.then(data => {
-                return data
-            })
-
+            
+            return await promise;
         }
     }
-
     
 
 }

@@ -14,9 +14,9 @@
     "got": "^11.8.2"
   },
   "author": "Thesourtimes",
-  "license": "APACHE",
+  "license": "MIT",
   "bugs": {
     "url": "https://gitlab.com/pinewood-builders/handbooks/pinewood/kronos-api/javascript/js-kronos/-/issues"
   },
-  "homepage": "https://gitlab.com/pinewood-builders/handbooks/pinewood/kronos-api/javascript/js-kronos"
+  "homepage": "https://github.com/Thesourtimes/js-kronos"
 }
